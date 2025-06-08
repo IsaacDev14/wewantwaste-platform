@@ -1,3 +1,4 @@
+// Homepage.tsx
 import { useState, useEffect } from "react";
 import axios from "axios";
 import {
@@ -11,10 +12,10 @@ import {
   FaCreditCard,
 } from "react-icons/fa";
 import WasteCard from "../components/WasteCard";
-import Topbar from "../components/Topbar"; // Import the new Topbar component
-import type { Skip } from "../types";
+import Topbar from "../components/Topbar";
+import type { SkipOption } from "../types"; // Updated type import from Skip to SkipOption
 
-// The steps array remains here as it's configuration data for this page.
+// Configuration data for the steps in the booking process
 const steps = [
   { label: "Postcode", icon: <FaMapMarkerAlt /> },
   { label: "Waste Type", icon: <FaTrashAlt /> },
@@ -25,13 +26,14 @@ const steps = [
 ];
 
 const Homepage = () => {
-  const [skips, setSkips] = useState<Skip[]>([]);
+  const [skips, setSkips] = useState<SkipOption[]>([]); // Updated type to SkipOption
   const [selectedSkip, setSelectedSkip] = useState<number | null>(null);
   const [hoveredSkip, setHoveredSkip] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false); // State for mobile menu remains here
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
+  // Fetch skip data on component mount
   useEffect(() => {
     const fetchSkips = async () => {
       try {
@@ -39,7 +41,7 @@ const Homepage = () => {
           "https://app.wewantwaste.co.uk/api/skips/by-location?postcode=NR32&area=Lowestoft"
         );
         setSkips(response.data);
-      } catch (err) {
+      } catch {
         setError("Unable to load skip sizes. Please try again later.");
       } finally {
         setLoading(false);
@@ -49,7 +51,7 @@ const Homepage = () => {
     fetchSkips();
   }, []);
 
-  // The toggle function remains in the parent to control the state.
+  // Toggle mobile menu visibility
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -81,18 +83,12 @@ const Homepage = () => {
 
   return (
     <div className="bg-gray-100">
-      {/* The entire <header> section is replaced by our new <Topbar> component.
-        We pass down the steps data, the active step's label, the menu state,
-        and the function to toggle it.
-      */}
       <Topbar
         steps={steps}
         activeStepLabel="Select Skip"
         isMenuOpen={isMenuOpen}
         toggleMenu={toggleMenu}
       />
-
-      {/* Main Content remains unchanged */}
       <main className="max-w-6xl mx-auto px-4 pt-20 pb-10">
         <div className="text-center my-8">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
@@ -102,8 +98,6 @@ const Homepage = () => {
             Select the skip size that best suits your needs
           </p>
         </div>
-
-        {/* Skip Cards */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {skips.map((skip) => (
             <WasteCard
@@ -116,8 +110,6 @@ const Homepage = () => {
             />
           ))}
         </section>
-
-        {/* Footer Navigation */}
         <div className="mt-12 flex flex-col items-center sm:flex-row justify-between gap-6">
           <button
             className="text-gray-600 hover:text-gray-900 flex items-center"
@@ -132,7 +124,6 @@ const Homepage = () => {
             </svg>
             Back
           </button>
-
           <div className="text-center">
             {selectedSkip && (
               <p className="text-gray-700 mb-2">
@@ -159,7 +150,6 @@ const Homepage = () => {
               <FaArrowRight className="ml-3" />
             </button>
           </div>
-
           <div className="w-24" />
         </div>
       </main>
