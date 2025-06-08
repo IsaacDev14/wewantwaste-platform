@@ -1,10 +1,13 @@
+// Topbar.tsx
 import { FaBars, FaTimes, FaArrowRight } from "react-icons/fa";
 
+// Interface for step configuration
 interface Step {
   label: string;
   icon: React.ReactNode;
 }
 
+// Interface for Topbar component props
 interface TopbarProps {
   steps: Step[];
   activeStepLabel: string;
@@ -12,7 +15,7 @@ interface TopbarProps {
   toggleMenu: () => void;
 }
 
-const Topbar = ({ steps, activeStepLabel, isMenuOpen, toggleMenu }: TopbarProps) => {
+const Topbar: React.FC<TopbarProps> = ({ steps, activeStepLabel, isMenuOpen, toggleMenu }) => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md shadow-sm">
       <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-end sm:justify-center">
