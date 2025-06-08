@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaSpinner, FaArrowRight } from "react-icons/fa";
 import WasteCard from "../components/WasteCard";
-import { Skip } from "../types";
+import type { Skip } from "../types";
 
 const Homepage = () => {
   const [selectedSkip, setSelectedSkip] = useState<number | null>(null);
@@ -120,7 +120,7 @@ const Homepage = () => {
                 selectedSkip
                   ? "hover:bg-blue-700 hover:shadow-xl"
                   : "opacity-50 cursor-not-allowed"
-              } flex items-center mx-auto`}
+              } flex items-center mx-auto group`}
             >
               <span>Continue to Delivery Options</span>
               <FaArrowRight className="ml-3 transition-transform duration-300 group-hover:translate-x-1" />
@@ -130,33 +130,6 @@ const Homepage = () => {
           <div className="w-24"></div>
         </div>
       </div>
-
-      <style jsx global>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fade-in {
-          animation: fadeIn 0.6s ease-out forwards;
-        }
-        .animate-fade-in-up {
-          animation: fadeInUp 0.6s ease-out forwards;
-        }
-      `}</style>
     </div>
   );
 };

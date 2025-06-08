@@ -1,5 +1,6 @@
 import { FaCheck, FaExclamationTriangle } from "react-icons/fa";
-import { Skip } from "../types";
+import type { Skip } from "../types";
+
 
 // Generic skip photos by size
 const skipPhotos: Record<number, string> = {
