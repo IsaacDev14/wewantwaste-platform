@@ -1,23 +1,37 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { FaSpinner, FaArrowRight } from "react-icons/fa";
+import {
+  FaSpinner,
+  FaArrowRight,
+  FaMapMarkerAlt,
+  FaTrashAlt,
+  FaTruck,
+  FaShieldAlt,
+  FaCalendarAlt,
+  FaCreditCard,
+} from "react-icons/fa";
 import WasteCard from "../components/WasteCard";
 import Topbar from "../components/Topbar"; // Import the new Topbar component
 import type { Skip } from "../types";
 
-const Homepage = () => {
-  // State for skips data
-  const [skips, setSkips] = useState<Skip[]>([]);
-  // State for selected skip
-  const [selectedSkip, setSelectedSkip] = useState<number | null>(null);
-  // State for hovered skip
-  const [hoveredSkip, setHoveredSkip] = useState<number | null>(null);
-  // State for loading status
-  const [loading, setLoading] = useState(true);
-  // State for error message
-  const [error, setError] = useState<string | null>(null);
+// The steps array remains here as it's configuration data for this page.
+const steps = [
+  { label: "Postcode", icon: <FaMapMarkerAlt /> },
+  { label: "Waste Type", icon: <FaTrashAlt /> },
+  { label: "Select Skip", icon: <FaTruck /> },
+  { label: "Permit Check", icon: <FaShieldAlt /> },
+  { label: "Choose Date", icon: <FaCalendarAlt /> },
+  { label: "Payment", icon: <FaCreditCard /> },
+];
 
-  // Fetch skips data on component mount
+const Homepage = () => {
+  const [skips, setSkips] = useState<Skip[]>([]);
+  const [selectedSkip, setSelectedSkip] = useState<number | null>(null);
+  const [hoveredSkip, setHoveredSkip] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false); // State for mobile menu remains here
+
   useEffect(() => {
     const fetchSkips = async () => {
       try {
@@ -35,7 +49,11 @@ const Homepage = () => {
     fetchSkips();
   }, []);
 
-  // Render loading state
+  // The toggle function remains in the parent to control the state.
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   if (loading) {
     return (
       <div className="min-h-[50vh] flex items-center justify-center bg-gray-100 pt-16">
@@ -44,7 +62,6 @@ const Homepage = () => {
     );
   }
 
-  // Render error state
   if (error) {
     return (
       <div className="min-h-[50vh] flex items-center justify-center bg-gray-100 pt-16">
@@ -62,13 +79,20 @@ const Homepage = () => {
     );
   }
 
-  // Main render
   return (
     <div className="bg-gray-100">
-      {/* Topbar Component */}
-      <Topbar />
+      {/* The entire <header> section is replaced by our new <Topbar> component.
+        We pass down the steps data, the active step's label, the menu state,
+        and the function to toggle it.
+      */}
+      <Topbar
+        steps={steps}
+        activeStepLabel="Select Skip"
+        isMenuOpen={isMenuOpen}
+        toggleMenu={toggleMenu}
+      />
 
-      {/* Main Content */}
+      {/* Main Content remains unchanged */}
       <main className="max-w-6xl mx-auto px-4 pt-20 pb-10">
         <div className="text-center my-8">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
