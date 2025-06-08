@@ -57,12 +57,16 @@ const Homepage = () => {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-[50vh] flex items-center justify-center bg-gray-100 pt-16">
-        <FaSpinner className="animate-spin text-4xl text-blue-600" />
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 px-4">
+      <div className="flex flex-col items-center bg-white/60 backdrop-blur-md p-8 rounded-2xl shadow-xl">
+        <FaSpinner className="animate-spin text-4xl text-blue-600 mb-4" />
+        <p className="text-gray-700 text-lg font-medium">Loading skips...</p>
       </div>
-    );
-  }
+    </div>
+  );
+}
+
 
   if (error) {
     return (
@@ -90,7 +94,7 @@ const Homepage = () => {
         toggleMenu={toggleMenu}
       />
       <main className="max-w-6xl mx-auto px-4 pt-20 pb-10">
-        <div className="text-center my-8">
+        <div className="text-center my-8 font-serif">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
             Choose Your Skip Size
           </h2>
@@ -98,6 +102,7 @@ const Homepage = () => {
             Select the skip size that best suits your needs
           </p>
         </div>
+
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {skips.map((skip) => (
             <WasteCard

@@ -2,15 +2,15 @@
 import { FaArrowRight, FaCheck } from "react-icons/fa";
 import type { Skip } from "../types"; // Updated type import to Skip
 import { FaCalendarDays } from "react-icons/fa6";
-import skip4Yard from "../assets/image.png";
+import skip4Yard from "../assets/image3.png";
 import skip6Yard from "../assets/image2.png";
-import skip8Yard from "../assets/image3.png";
+import skip8Yard from "../assets/image.png";
 import skip10Yard from "../assets/image4.png";
-import skip12Yard from "../assets/image4.png";
+import skip12Yard from "../assets/image.png";
 import skip14Yard from "../assets/image4.png";
-import skip16Yard from "../assets/image4.png";
+import skip16Yard from "../assets/image2.png";
 import skip20Yard from "../assets/image4.png";
-import skip40Yard from "../assets/image4.png";
+import skip40Yard from "../assets/image3.png";
 
 // Mapping of skip sizes to their respective images
 const skipPhotos: Record<number, string> = {
