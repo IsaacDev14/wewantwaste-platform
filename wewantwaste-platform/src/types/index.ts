@@ -1,3 +1,4 @@
+// types.ts - Define the Skip interface for type safety
 export interface Skip {
   id: number;
   size: number;

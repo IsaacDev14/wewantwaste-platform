@@ -1,5 +1,6 @@
-import { FaCheck, FaExclamationTriangle } from "react-icons/fa";
+import { FaArrowRight, FaCheck, FaExclamationTriangle } from "react-icons/fa";
 import type { Skip } from "../types";
+import { FaCalendarDays } from "react-icons/fa6";
 
 
 // Generic skip photos by size
@@ -52,6 +53,7 @@ const WasteCard: React.FC<WasteCardProps> = ({
 
   return (
     <div
+    onClick={() => setSelectedSkip(skip.id)}
       className={`relative bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 transform ${
         selectedSkip === skip.id
           ? "ring-4 ring-blue-500 shadow-xl scale-[1.02]"
@@ -77,65 +79,36 @@ const WasteCard: React.FC<WasteCardProps> = ({
       )}
 
       {skip.size === 8 && (
-        <div className="absolute top-20 left-4 bg-yellow-400 text-yellow-900 px-3 py-1 text-xs font-bold rounded-full z-10 animate-pulse">
+        <div className="absolute top-2 left-4 bg-yellow-400 text-yellow-900 px-3 py-1 text-xs font-bold rounded-full z-10 animate-pulse">
           MOST POPULAR
         </div>
       )}
 
       {selectedSkip === skip.id && (
-        <div className="absolute top-20 right-4 bg-blue-500 text-white px-3 py-1 text-sm font-semibold rounded-full flex items-center animate-bounce">
+        <div className="absolute top-2 right-4 bg-blue-500 text-white px-3 py-1 text-sm font-semibold rounded-full flex items-center animate-bounce">
           <FaCheck className="mr-1" /> SELECTED
         </div>
       )}
 
-      <div className="p-6">
+      <div className="p-4">
         <div className="flex justify-between items-start mb-4">
           <div>
-            <h3 className="text-2xl font-bold text-gray-900">
+            <h3 className="text-lg font-bold text-gray-900">
               {skip.size} Yard Skip
             </h3>
-            <p className="text-gray-500 text-sm">{getDescription(skip.size)}</p>
-          </div>
-          <span className="text-2xl font-bold text-blue-600">
+              </div>
+           
+        
+          <span className="text-lg font-bold text-blue-600">
             {formatPrice(skip.price_before_vat, skip.vat)}
           </span>
         </div>
-
+ <p className="text-gray-500 text-sm">{getDescription(skip.size)}</p>
         {/* Permit Warning Card */}
-        {!skip.allowed_on_road && (
-          <div className="mb-4 p-4 bg-red-50 border-l-4 border-red-500 rounded-r-lg">
-            <div className="flex items-start">
-              <FaExclamationTriangle className="text-red-500 mt-1 mr-2 flex-shrink-0" />
-              <div>
-                <h4 className="font-bold text-red-700">Road Permit Required</h4>
-                <p className="text-sm text-red-600">
-                  This size requires a council permit for road placement.
-                  Additional fees may apply.
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Heavy Waste Warning */}
-        {!skip.allows_heavy_waste && (
-          <div className="mb-4 p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-r-lg">
-            <div className="flex items-start">
-              <FaExclamationTriangle className="text-yellow-500 mt-1 mr-2 flex-shrink-0" />
-              <div>
-                <h4 className="font-bold text-yellow-700">
-                  Heavy Waste Restrictions
-                </h4>
-                <p className="text-sm text-yellow-600">
-                  This skip cannot accept soil, rubble, or other heavy materials.
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
+      
 
         <div className="mb-6">
-          <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
+          {/* <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
             <div
               className={`h-full bg-blue-500 rounded-full transition-all duration-500 ${
                 hoveredSkip === skip.id || selectedSkip === skip.id
@@ -146,28 +119,31 @@ const WasteCard: React.FC<WasteCardProps> = ({
                 width: `${(skip.size / 40) * 100}%`,
               }}
             />
-          </div>
-          <p className="text-sm text-gray-500 mt-2">
-            {skip.hire_period_days} day hire period
-          </p>
+          </div> */}
+        <p className="text-sm text-gray-500 mt-2 flex items-center">
+  <FaCalendarDays className="text-blue-500 mr-2" />
+  {skip.hire_period_days} day hire period
+</p>
         </div>
 
-        <button
-          onClick={() => setSelectedSkip(skip.id)}
-          className={`w-full py-3 px-4 rounded-lg font-medium transition-all duration-200 ${
-            selectedSkip === skip.id
-              ? "bg-blue-600 text-white shadow-md"
-              : "bg-gray-100 text-gray-800 hover:bg-blue-100 hover:text-blue-700"
-          } ${!skip.allowed_on_road ? "border-2 border-red-500" : ""}`}
-        >
-          {selectedSkip === skip.id ? (
-            <span className="flex items-center justify-center">
-              <FaCheck className="mr-2" /> Selected
-            </span>
-          ) : (
-            "Select This Skip"
-          )}
-        </button>
+       <button
+  className={`w-full py-2 px-4 rounded-lg font-medium transition-all duration-200 ${
+    selectedSkip === skip.id
+      ? "bg-blue-600 text-white shadow-md"
+      : "bg-gray-100 text-gray-800 hover:bg-blue-100 hover:text-blue-700"
+  } ${!skip.allowed_on_road ? "border-2 border-red-500" : ""}`}
+>
+  {selectedSkip === skip.id ? (
+    <span className="flex items-center justify-center">
+      <FaCheck className="mr-2 h-5 w-5" /> Selected
+    </span>
+  ) : (
+    <span className="flex items-center justify-center">
+      Select This Skip <FaArrowRight className="ml-2 h-5 w-5" />
+    </span>
+  )}
+</button>
+
       </div>
     </div>
   );
