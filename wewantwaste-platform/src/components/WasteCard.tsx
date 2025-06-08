@@ -3,17 +3,28 @@ import type { Skip } from "../types";
 import { FaCalendarDays } from "react-icons/fa6";
 
 
+// Import local images
+import skip4Yard from "../assets/image.png";
+import skip6Yard from "../assets/image2.png";
+import skip8Yard from "../assets/image3.png";
+import skip10Yard from "../assets/image4.png";
+import skip12Yard from "../assets/image4.png";
+import skip14Yard from "../assets/image4.png";
+import skip16Yard from "../assets/image4.png";
+import skip20Yard from "../assets/image4.png";
+import skip40Yard from "../assets/image4.png";
+
 // Generic skip photos by size
 const skipPhotos: Record<number, string> = {
-  4: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-  6: "https://images.unsplash.com/photo-1581093196275-1a37d95a8a0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-  8: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-  10: "https://images.unsplash.com/photo-1605001011156-cbf0b0f67a51?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-  12: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-  14: "https://images.unsplash.com/photo-1581093196275-1a37d95a8a0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-  16: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-  20: "https://images.unsplash.com/photo-1605001011156-cbf0b0f67a51?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-  40: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+  4: skip4Yard,
+  6: skip6Yard,
+  8: skip8Yard,
+  10: skip10Yard,
+  12: skip12Yard,
+  14: skip14Yard,
+  16: skip16Yard,
+  20: skip20Yard,
+  40: skip40Yard,
 };
 
 interface WasteCardProps {
@@ -73,7 +84,7 @@ const WasteCard: React.FC<WasteCardProps> = ({
 
       {/* Permit Warning Banner */}
       {!skip.allowed_on_road && (
-        <div className="absolute top-4 left-0 right-0 bg-red-500 text-white text-center py-1 px-3 text-sm font-bold transform -rotate-3 scale-110 shadow-md">
+        <div className="absolute top-4 left-0 right-0 bg-red-500 text-white text-center py-1 px-3 text-sm font-bold transform -rotate-3 scale-110 shadow-md ">
           ROAD PERMIT REQUIRED
         </div>
       )}
@@ -108,18 +119,7 @@ const WasteCard: React.FC<WasteCardProps> = ({
       
 
         <div className="mb-6">
-          {/* <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
-            <div
-              className={`h-full bg-blue-500 rounded-full transition-all duration-500 ${
-                hoveredSkip === skip.id || selectedSkip === skip.id
-                  ? "bg-blue-600"
-                  : ""
-              }`}
-              style={{
-                width: `${(skip.size / 40) * 100}%`,
-              }}
-            />
-          </div> */}
+        
         <p className="text-sm text-gray-500 mt-2 flex items-center">
   <FaCalendarDays className="text-blue-500 mr-2" />
   {skip.hire_period_days} day hire period
