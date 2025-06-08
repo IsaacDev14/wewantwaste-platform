@@ -1,4 +1,3 @@
-// Homepage.tsx
 import { useState, useEffect } from "react";
 import axios from "axios";
 import {
@@ -13,7 +12,7 @@ import {
 } from "react-icons/fa";
 import WasteCard from "../components/WasteCard";
 import Topbar from "../components/Topbar";
-import type { Skip } from "../types"; // Updated type import to Skip
+import type { Skip } from "../types";
 
 // Configuration data for the steps in the booking process
 const steps = [
@@ -26,14 +25,13 @@ const steps = [
 ];
 
 const Homepage = () => {
-  const [skips, setSkips] = useState<Skip[]>([]); // Updated type to Skip
+  const [skips, setSkips] = useState<Skip[]>([]);
   const [selectedSkip, setSelectedSkip] = useState<number | null>(null);
   const [hoveredSkip, setHoveredSkip] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
-  // Fetch skip data on component mount
   useEffect(() => {
     const fetchSkips = async () => {
       try {
@@ -51,22 +49,20 @@ const Homepage = () => {
     fetchSkips();
   }, []);
 
-  // Toggle mobile menu visibility
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   if (loading) {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 px-4">
-      <div className="flex flex-col items-center bg-white/60 backdrop-blur-md p-8 rounded-2xl shadow-xl">
-        <FaSpinner className="animate-spin text-4xl text-blue-600 mb-4" />
-        <p className="text-gray-700 text-lg font-medium">Loading skips...</p>
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 px-4">
+        <div className="flex flex-col items-center bg-white/60 backdrop-blur-md p-8 rounded-2xl shadow-xl">
+          <FaSpinner className="animate-spin text-4xl text-blue-600 mb-4" />
+          <p className="text-gray-700 text-lg font-medium">Loading skips...</p>
+        </div>
       </div>
-    </div>
-  );
-}
-
+    );
+  }
 
   if (error) {
     return (
@@ -115,6 +111,7 @@ const Homepage = () => {
             />
           ))}
         </section>
+
         <div className="mt-12 flex flex-col items-center sm:flex-row justify-between gap-6">
           <button
             className="text-gray-600 hover:text-gray-900 flex items-center"
@@ -158,6 +155,14 @@ const Homepage = () => {
           <div className="w-24" />
         </div>
       </main>
+
+      <footer className="text-center text-xs text-gray-500 px-6 pb-6 max-w-4xl mx-auto">
+        <p className="mt-4">
+          Imagery and information shown throughout this website may not reflect
+          the exact shape or size specification. Colours may vary. Options
+          and/or accessories may be featured at additional cost.
+        </p>
+      </footer>
     </div>
   );
 };
