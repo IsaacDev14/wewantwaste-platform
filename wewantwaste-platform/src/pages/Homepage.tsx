@@ -13,7 +13,7 @@ import {
 } from "react-icons/fa";
 import WasteCard from "../components/WasteCard";
 import Topbar from "../components/Topbar";
-import type { SkipOption } from "../types"; // Updated type import from Skip to SkipOption
+import type { Skip } from "../types"; // Updated type import to Skip
 
 // Configuration data for the steps in the booking process
 const steps = [
@@ -26,7 +26,7 @@ const steps = [
 ];
 
 const Homepage = () => {
-  const [skips, setSkips] = useState<SkipOption[]>([]); // Updated type to SkipOption
+  const [skips, setSkips] = useState<Skip[]>([]); // Updated type to Skip
   const [selectedSkip, setSelectedSkip] = useState<number | null>(null);
   const [hoveredSkip, setHoveredSkip] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
