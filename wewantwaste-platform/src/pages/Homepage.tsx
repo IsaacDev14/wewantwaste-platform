@@ -1,79 +1,163 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import {
+  FaSpinner,
   FaArrowRight,
   FaMapMarkerAlt,
-  // ... other icons
+  FaTrashAlt,
+  FaTruck,
+  FaShieldAlt,
+  FaCalendarAlt,
+  FaCreditCard,
 } from "react-icons/fa";
 import WasteCard from "../components/WasteCard";
-import Topbar from "../components/Topbar";
+import Topbar from "../components/Topbar"; // Import the new Topbar component
 import type { Skip } from "../types";
-import { useSkips } from "../hooks/useSkips"; // <-- Import the hook
-import LoadingSpinner from "../components/LoadingSpinner"; // <-- New component (see below)
-import ErrorDisplay from "../components/ErrorDisplay"; // <-- New component (see below)
 
+// The steps array remains here as it's configuration data for this page.
 const steps = [
-  // ... steps array is unchanged
+  { label: "Postcode", icon: <FaMapMarkerAlt /> },
+  { label: "Waste Type", icon: <FaTrashAlt /> },
+  { label: "Select Skip", icon: <FaTruck /> },
+  { label: "Permit Check", icon: <FaShieldAlt /> },
+  { label: "Choose Date", icon: <FaCalendarAlt /> },
+  { label: "Payment", icon: <FaCreditCard /> },
 ];
 
 const Homepage = () => {
-  // --- All this state management is now replaced by our hook ---
-  // const [skips, setSkips] = useState<Skip[]>([]);
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState<string | null>(null);
-
-  // --- Replaced with this single line ---
-  const { skips, loading, error } = useSkips("NR32", "Lowestoft");
-
+  const [skips, setSkips] = useState<Skip[]>([]);
   const [selectedSkip, setSelectedSkip] = useState<number | null>(null);
   const [hoveredSkip, setHoveredSkip] = useState<number | null>(null);
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false); // State for mobile menu remains here
 
-  // --- The useEffect for fetching is now gone, handled by the hook ---
+  useEffect(() => {
+    const fetchSkips = async () => {
+      try {
+        const response = await axios.get(
+          "https://app.wewantwaste.co.uk/api/skips/by-location?postcode=NR32&area=Lowestoft"
+        );
+        setSkips(response.data);
+      } catch (err) {
+        setError("Unable to load skip sizes. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchSkips();
+  }, []);
+
+  // The toggle function remains in the parent to control the state.
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  // --- The loading and error return blocks can be componentized ---
   if (loading) {
-    return <LoadingSpinner />;
+    return (
+      <div className="min-h-[50vh] flex items-center justify-center bg-gray-100 pt-16">
+        <FaSpinner className="animate-spin text-4xl text-blue-600" />
+      </div>
+    );
   }
 
   if (error) {
-    return <ErrorDisplay message={error} />;
+    return (
+      <div className="min-h-[50vh] flex items-center justify-center bg-gray-100 pt-16">
+        <div className="bg-white p-6 rounded-lg shadow-md text-center">
+          <h2 className="text-2xl text-red-600 font-bold mb-2">Error</h2>
+          <p className="text-gray-700 mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
   }
-  
-  // Find the selected skip once to avoid re-calculating in the JSX
-  const currentlySelectedSkip = skips.find((s) => s.id === selectedSkip);
 
   return (
     <div className="bg-gray-100">
+      {/* The entire <header> section is replaced by our new <Topbar> component.
+        We pass down the steps data, the active step's label, the menu state,
+        and the function to toggle it.
+      */}
       <Topbar
-        // ... props are unchanged
+        steps={steps}
+        activeStepLabel="Select Skip"
+        isMenuOpen={isMenuOpen}
+        toggleMenu={toggleMenu}
       />
 
+      {/* Main Content remains unchanged */}
       <main className="max-w-6xl mx-auto px-4 pt-20 pb-10">
-        {/* ... main content ... */}
+        <div className="text-center my-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
+            Choose Your Skip Size
+          </h2>
+          <p className="mt-2 text-gray-600 text-sm sm:text-base">
+            Select the skip size that best suits your needs
+          </p>
+        </div>
+
+        {/* Skip Cards */}
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {skips.map((skip) => (
+            <WasteCard
+              key={skip.id}
+              skip={skip}
+              selectedSkip={selectedSkip}
+              hoveredSkip={hoveredSkip}
+              setSelectedSkip={setSelectedSkip}
+              setHoveredSkip={setHoveredSkip}
+            />
+          ))}
+        </section>
 
         {/* Footer Navigation */}
         <div className="mt-12 flex flex-col items-center sm:flex-row justify-between gap-6">
-          {/* ... back button ... */}
+          <button
+            className="text-gray-600 hover:text-gray-900 flex items-center"
+            onClick={() => console.log("Go back")}
+          >
+            <svg
+              className="w-5 h-5 mr-2"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" />
+            </svg>
+            Back
+          </button>
 
           <div className="text-center">
-            {currentlySelectedSkip && (
+            {selectedSkip && (
               <p className="text-gray-700 mb-2">
                 Selected:{" "}
                 <span className="font-semibold">
-                  {currentlySelectedSkip.size} Yard Skip
+                  {skips.find((s) => s.id === selectedSkip)?.size} Yard Skip
                 </span>
-                {!currentlySelectedSkip.allowed_on_road && (
+                {!skips.find((s) => s.id === selectedSkip)?.allowed_on_road && (
                   <span className="text-red-500 text-sm ml-2">
                     (Permit Required)
                   </span>
                 )}
               </p>
             )}
-            {/* ... continue button ... */}
+            <button
+              disabled={!selectedSkip}
+              className={`bg-blue-600 text-white px-6 py-3 rounded shadow transition-all duration-200 flex items-center ${
+                selectedSkip
+                  ? "hover:bg-blue-700"
+                  : "opacity-50 cursor-not-allowed"
+              }`}
+            >
+              Continue to Delivery Options
+              <FaArrowRight className="ml-3" />
+            </button>
           </div>
 
           <div className="w-24" />

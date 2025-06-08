@@ -1,16 +1,10 @@
-import {
-  FaBars,
-  FaTimes,
-  FaArrowRight, // Import the arrow icon
-} from "react-icons/fa";
+import { FaBars, FaTimes, FaArrowRight } from "react-icons/fa";
 
-// Define the shape of a single step object for type safety.
 interface Step {
   label: string;
   icon: React.ReactNode;
 }
 
-// Define the props that the Topbar component will accept.
 interface TopbarProps {
   steps: Step[];
   activeStepLabel: string;
@@ -21,22 +15,13 @@ interface TopbarProps {
 const Topbar = ({ steps, activeStepLabel, isMenuOpen, toggleMenu }: TopbarProps) => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md shadow-sm">
-      {/*
-        FIX: Changed "justify-between" to "justify-end sm:justify-center".
-        - "justify-end": On mobile, this pushes the hamburger menu to the right.
-        - "sm:justify-center": On desktop (small screens and up), this centers the entire nav content.
-      */}
       <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-end sm:justify-center">
-        {/* Desktop Progress Steps: Hidden on small screens */}
+        {/* Step Navigation - Desktop */}
         <nav className="hidden sm:flex items-center text-sm">
           {steps.map((step, index) => {
-            // Determine if the current step is the active one based on the prop.
             const isActive = step.label === activeStepLabel;
             return (
-              <div
-                key={index}
-                className="flex items-center whitespace-nowrap"
-              >
+              <div key={index} className="flex items-center whitespace-nowrap">
                 <div
                   className={`flex items-center px-2 py-1 rounded-2xl transition-colors ${
                     isActive
@@ -47,10 +32,6 @@ const Topbar = ({ steps, activeStepLabel, isMenuOpen, toggleMenu }: TopbarProps)
                   <span className="text-base mr-1">{step.icon}</span>
                   {step.label}
                 </div>
-                
-                {/*
-                  FEATURE: Replaced the line divider with an arrow for better flow indication.
-                */}
                 {index < steps.length - 1 && (
                   <FaArrowRight className="mx-4 text-gray-300" />
                 )}
@@ -59,20 +40,16 @@ const Topbar = ({ steps, activeStepLabel, isMenuOpen, toggleMenu }: TopbarProps)
           })}
         </nav>
 
-        {/* Mobile Menu Button: Visible only on small screens */}
+        {/* Menu toggle for mobile */}
         <button
           className="sm:hidden text-gray-700 hover:text-blue-600"
           onClick={toggleMenu}
         >
-          {isMenuOpen ? (
-            <FaTimes className="h-6 w-6" />
-          ) : (
-            <FaBars className="h-6 w-6" />
-          )}
+          {isMenuOpen ? <FaTimes className="h-6 w-6" /> : <FaBars className="h-6 w-6" />}
         </button>
       </div>
 
-      {/* Mobile Progress Steps Menu: Conditionally rendered based on isMenuOpen state */}
+      {/* Mobile Menu */}
       {isMenuOpen && (
         <nav className="sm:hidden bg-white/90 backdrop-blur-md px-4 py-4">
           <div className="flex flex-col space-y-2">
@@ -86,14 +63,14 @@ const Topbar = ({ steps, activeStepLabel, isMenuOpen, toggleMenu }: TopbarProps)
                       ? "bg-blue-600 text-white font-semibold"
                       : "text-gray-600 hover:bg-blue-100 hover:text-blue-600"
                   }`}
-                  onClick={toggleMenu} // Close menu on item click
+                  onClick={toggleMenu}
                 >
                   <span className="text-base mr-2">{step.icon}</span>
                   {step.label}
                 </div>
               );
             })}
-             <button
+            <button
               className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors mt-2"
               onClick={toggleMenu}
             >
