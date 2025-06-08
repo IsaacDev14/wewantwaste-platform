@@ -1,6 +1,7 @@
 import {
   FaBars,
   FaTimes,
+  FaArrowRight, // Import the arrow icon
 } from "react-icons/fa";
 
 // Define the shape of a single step object for type safety.
@@ -20,9 +21,14 @@ interface TopbarProps {
 const Topbar = ({ steps, activeStepLabel, isMenuOpen, toggleMenu }: TopbarProps) => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md shadow-sm">
-      <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+      {/*
+        FIX: Changed "justify-between" to "justify-end sm:justify-center".
+        - "justify-end": On mobile, this pushes the hamburger menu to the right.
+        - "sm:justify-center": On desktop (small screens and up), this centers the entire nav content.
+      */}
+      <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-end sm:justify-center">
         {/* Desktop Progress Steps: Hidden on small screens */}
-        <nav className="hidden sm:flex items-center justify-center space-x-4 text-sm sm:justify-center">
+        <nav className="hidden sm:flex items-center text-sm">
           {steps.map((step, index) => {
             // Determine if the current step is the active one based on the prop.
             const isActive = step.label === activeStepLabel;
@@ -41,9 +47,12 @@ const Topbar = ({ steps, activeStepLabel, isMenuOpen, toggleMenu }: TopbarProps)
                   <span className="text-base mr-1">{step.icon}</span>
                   {step.label}
                 </div>
-                {/* Render a divider between steps, but not after the last one. */}
+                
+                {/*
+                  FEATURE: Replaced the line divider with an arrow for better flow indication.
+                */}
                 {index < steps.length - 1 && (
-                  <span className="mx-2 text-gray-400">━</span>
+                  <FaArrowRight className="mx-4 text-gray-300" />
                 )}
               </div>
             );
@@ -67,11 +76,11 @@ const Topbar = ({ steps, activeStepLabel, isMenuOpen, toggleMenu }: TopbarProps)
       {isMenuOpen && (
         <nav className="sm:hidden bg-white/90 backdrop-blur-md px-4 py-4">
           <div className="flex flex-col space-y-2">
-            {steps.map((step, index) => {
+            {steps.map((step) => {
               const isActive = step.label === activeStepLabel;
               return (
                 <div
-                  key={index}
+                  key={step.label}
                   className={`flex items-center px-3 py-2 rounded-lg transition-colors ${
                     isActive
                       ? "bg-blue-600 text-white font-semibold"
