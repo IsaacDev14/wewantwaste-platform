@@ -1,6 +1,6 @@
 // WasteCard.tsx
-import { FaArrowRight, FaCheck } from "react-icons/fa"; // Removed unused FaExclamationTriangle
-import type { SkipOption } from "../types"; // Updated type import from Skip to SkipOption
+import { FaArrowRight, FaCheck } from "react-icons/fa";
+import type { Skip } from "../types"; // Updated type import to Skip
 import { FaCalendarDays } from "react-icons/fa6";
 import skip4Yard from "../assets/image.png";
 import skip6Yard from "../assets/image2.png";
@@ -25,19 +25,20 @@ const skipPhotos: Record<number, string> = {
   40: skip40Yard,
 };
 
+// Props interface for the WasteCard component
 interface WasteCardProps {
-  skip: SkipOption; // Updated type to SkipOption
-  selectedSkip: number | null;
-  hoveredSkip: number | null;
-  setSelectedSkip: (id: number) => void;
-  setHoveredSkip: (id: number | null) => void;
+  skip: Skip; // Updated type to Skip
+  selectedSkip: number | null; // ID of the currently selected skip
+  hoveredSkip: number | null; // ID of the currently hovered skip
+  setSelectedSkip: (id: number) => void; // Function to set the selected skip
+  setHoveredSkip: (id: number | null) => void; // Function to set the hovered skip
 }
 
 const WasteCard: React.FC<WasteCardProps> = ({
   skip,
   selectedSkip,
   setSelectedSkip,
-  setHoveredSkip, // Removed unused hoveredSkip
+  setHoveredSkip,
 }) => {
   // Format price including VAT
   const formatPrice = (priceBeforeVat: number, vat: number) => {
@@ -72,6 +73,7 @@ const WasteCard: React.FC<WasteCardProps> = ({
       onMouseEnter={() => setHoveredSkip(skip.id)}
       onMouseLeave={() => setHoveredSkip(null)}
     >
+      {/* Skip Image */}
       <div className="h-48 overflow-hidden">
         <img
           src={skipPhotos[skip.size] || skipPhotos[4]}
@@ -79,16 +81,19 @@ const WasteCard: React.FC<WasteCardProps> = ({
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
         />
       </div>
+      {/* Permit Warning Banner */}
       {!skip.allowed_on_road && (
         <div className="absolute top-4 left-0 right-0 bg-red-500 text-white text-center py-1 px-3 text-sm font-bold transform -rotate-3 scale-110 shadow-md">
           ROAD PERMIT REQUIRED
         </div>
       )}
+      {/* Popular Badge for 8-yard skip */}
       {skip.size === 8 && (
         <div className="absolute top-2 left-4 bg-yellow-400 text-yellow-900 px-3 py-1 text-xs font-bold rounded-full z-10 animate-pulse">
           MOST POPULAR
         </div>
       )}
+      {/* Selected Badge */}
       {selectedSkip === skip.id && (
         <div className="absolute top-2 right-4 bg-blue-500 text-white px-3 py-1 text-sm font-semibold rounded-full flex items-center animate-bounce">
           <FaCheck className="mr-1" /> SELECTED
