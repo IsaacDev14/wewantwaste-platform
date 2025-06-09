@@ -171,7 +171,7 @@ const Homepage = () => {
             </p>
             
             <button
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold flex items-center hover:bg-blue-700 transition-all duration-200"
+              className="bg-blue-600 text-white px-2 py-2 rounded-lg font-semibold flex items-center hover:bg-blue-700 transition-all duration-200"
               onClick={() => console.log("Proceed to delivery options")}
             >
               Continue to Permit Check
@@ -181,7 +181,7 @@ const Homepage = () => {
           </div>
           
       {/* Footer with disclaimer */}
-      <footer className="text-center text-xs text-gray-500 px-6 pb-10 max-w-4xl mx-auto">
+      <footer className="text-center text-xs text-gray-500 pb-4 max-w-4xl mx-auto">
         <p className="leading-relaxed">
           Imagery and information shown throughout this website may not reflect
           the exact shape or size specification. Colours may vary. Options
