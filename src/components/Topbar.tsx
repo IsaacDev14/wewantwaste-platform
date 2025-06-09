@@ -24,7 +24,7 @@ const Topbar: React.FC<TopbarProps> = ({
 }) => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md shadow-sm">
-      <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-end sm:justify-center">
+      <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-end sm:justify-center cursor-pointer">
         {/* Step Navigation - Desktop */}
         <nav className="hidden sm:flex items-center text-sm">
           {steps.map((step, index) => {

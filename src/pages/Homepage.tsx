@@ -168,10 +168,10 @@ const Homepage = () => {
             <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
               <p className="text-gray-700 text-sm sm:text-base text-center">
                 Selected:{" "}
-                <span className="font-semibold text-blue-700">
+                <span className="font-semibold text-black">
                   {selectedSkipData.size} Yard Skip
                 </span>{" "}
-                – <span className="text-green-600">{calculateTotal()}</span>
+                – <span className="text-blue-600">{calculateTotal()}</span>
                 {!selectedSkipData.allowed_on_road && (
                   <span className="text-red-500 text-xs ml-2 font-semibold inline-flex items-center">
                     <FaExclamationTriangle className="mr-1" />
@@ -181,7 +181,7 @@ const Homepage = () => {
               </p>
 
               <button
-                className="bg-blue-600 text-white px-2 py-2 rounded-lg font-semibold flex items-center hover:bg-blue-700 transition-all duration-200"
+                className="bg-blue-600 text-white px-2 py-2 rounded-lg font-semibold flex items-center hover:bg-blue-700 transition-all duration-200 cursor-pointer"
                 onClick={() => console.log("Proceed to delivery options")}
               >
                 Continue to Permit Check
