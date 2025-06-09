@@ -168,10 +168,10 @@ const Homepage = () => {
             <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
               <p className="text-gray-700 text-sm sm:text-base text-center">
                 Selected:{" "}
-                <span className="font-semibold text-black">
+                <span className="font-bold text-black">
                   {selectedSkipData.size} Yard Skip
                 </span>{" "}
-                – <span className="text-blue-600">{calculateTotal()}</span>
+                – <span className="text-blue-600 font-bold">{calculateTotal()}</span>
                 {!selectedSkipData.allowed_on_road && (
                   <span className="text-red-500 text-xs ml-2 font-semibold inline-flex items-center">
                     <FaExclamationTriangle className="mr-1" />
