@@ -1,6 +1,5 @@
-// WasteCard.tsx
 import { FaArrowRight, FaCheck } from "react-icons/fa";
-import type { Skip } from "../types"; // Updated type import to Skip
+import type { Skip } from "../types"; // Import Skip type
 import { FaCalendarDays } from "react-icons/fa6";
 import skip4Yard from "../assets/image3.png";
 import skip6Yard from "../assets/image2.png";
@@ -27,11 +26,11 @@ const skipPhotos: Record<number, string> = {
 
 // Props interface for the WasteCard component
 interface WasteCardProps {
-  skip: Skip; // Updated type to Skip
-  selectedSkip: number | null; // ID of the currently selected skip
-  hoveredSkip: number | null; // ID of the currently hovered skip
-  setSelectedSkip: (id: number) => void; // Function to set the selected skip
-  setHoveredSkip: (id: number | null) => void; // Function to set the hovered skip
+  skip: Skip;
+  selectedSkip: number | null;
+  hoveredSkip: number | null;
+  setSelectedSkip: (id: number | null) => void; // Allow null for deselection
+  setHoveredSkip: (id: number | null) => void;
 }
 
 const WasteCard: React.FC<WasteCardProps> = ({
@@ -62,12 +61,15 @@ const WasteCard: React.FC<WasteCardProps> = ({
     return descriptions[size] || "General purpose waste container";
   };
 
+  // Handle card click to toggle selection
+  const handleCardClick = () => {
+    setSelectedSkip(selectedSkip === skip.id ? null : skip.id);
+  };
+
   return (
     <div
-      onClick={() =>
-  setSelectedSkip(selectedSkip === skip.id ? null : skip.id)
-}
-      className={`relative bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 transform cursor-pointer ${
+      onClick={handleCardClick}
+      className={`relative bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 transform ${
         selectedSkip === skip.id
           ? "ring-4 ring-blue-500 shadow-xl scale-[1.02]"
           : "hover:scale-[1.02] hover:shadow-xl"

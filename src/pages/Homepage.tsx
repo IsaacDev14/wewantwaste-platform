@@ -14,7 +14,7 @@ import WasteCard from "../components/WasteCard";
 import Topbar from "../components/Topbar";
 import type { Skip } from "../types";
 
-// Configuration data for the steps in the booking process
+// Booking steps config
 const steps = [
   { label: "Postcode", icon: <FaMapMarkerAlt /> },
   { label: "Waste Type", icon: <FaTrashAlt /> },
@@ -32,6 +32,7 @@ const Homepage = () => {
   const [error, setError] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
+  // Load skips from API
   useEffect(() => {
     const fetchSkips = async () => {
       try {
@@ -45,25 +46,25 @@ const Homepage = () => {
         setLoading(false);
       }
     };
-
     fetchSkips();
   }, []);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  // Toggle mobile menu
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
+  // Handle loading state
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 px-4">
-        <div className="flex flex-col items-center bg-white/60 backdrop-blur-md p-8 rounded-2xl shadow-xl">
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="flex flex-col items-center bg-white p-8 rounded-xl shadow-xl">
           <FaSpinner className="animate-spin text-4xl text-blue-600 mb-4" />
-          <p className="text-gray-700 text-lg font-medium">Loading skips...</p>
+          <p className="text-gray-700 text-lg">Loading skips...</p>
         </div>
       </div>
     );
   }
 
+  // Handle error
   if (error) {
     return (
       <div className="min-h-[50vh] flex items-center justify-center bg-gray-100 pt-16">
@@ -81,8 +82,14 @@ const Homepage = () => {
     );
   }
 
+  const selected = skips.find((s) => s.id === selectedSkip);
+  const totalPrice =
+    selected && selected.price_before_vat
+      ? `£${(selected.price_before_vat + (selected.price_before_vat * selected.vat) / 100).toFixed(2)}`
+      : "";
+
   return (
-    <div className="bg-gray-100">
+    <div className="bg-gray-100 min-h-screen relative pb-28">
       <Topbar
         steps={steps}
         activeStepLabel="Select Skip"
@@ -99,6 +106,7 @@ const Homepage = () => {
           </p>
         </div>
 
+        {/* Grid of skips */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {skips.map((skip) => (
             <WasteCard
@@ -112,57 +120,35 @@ const Homepage = () => {
           ))}
         </section>
 
-        <div className="mt-12 flex flex-col items-center sm:flex-row justify-between gap-6">
-          <button
-            className="text-gray-600 hover:text-gray-900 flex items-center"
-            onClick={() => console.log("Go back")}
-          >
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" />
-            </svg>
-            Back
-          </button>
-          <div className="text-center">
-            {selectedSkip && (
-              <p className="text-gray-700 mb-2">
-                Selected:{" "}
-                <span className="font-semibold">
-                  {skips.find((s) => s.id === selectedSkip)?.size} Yard Skip
-                </span>
-                {!skips.find((s) => s.id === selectedSkip)?.allowed_on_road && (
-                  <span className="text-red-500 text-sm ml-2">
-                    (Permit Required)
-                  </span>
-                )}
-              </p>
-            )}
-            <button
-              disabled={!selectedSkip}
-              className={`bg-blue-600 text-white px-6 py-3 rounded shadow transition-all duration-200 flex items-center ${
-                selectedSkip
-                  ? "hover:bg-blue-700"
-                  : "opacity-50 cursor-not-allowed"
-              }`}
-            >
-              Continue to Delivery Options
-              <FaArrowRight className="ml-3" />
-            </button>
-          </div>
-          <div className="w-24" />
-        </div>
+        {/* Footer */}
+        <footer className="text-center text-xs text-gray-500 px-6 pt-12 max-w-4xl mx-auto">
+          <p className="mt-4">
+            Imagery and information shown throughout this website may not reflect
+            the exact shape or size specification. Colours may vary. Options and/or
+            accessories may be featured at additional cost.
+          </p>
+        </footer>
       </main>
 
-      <footer className="text-center text-xs text-gray-500 px-6 pb-6 max-w-4xl mx-auto">
-        <p className="mt-4">
-          Imagery and information shown throughout this website may not reflect
-          the exact shape or size specification. Colours may vary. Options
-          and/or accessories may be featured at additional cost.
-        </p>
-      </footer>
+      {/* Fixed bottom bar only when a skip is selected */}
+      {selectedSkip && selected && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white shadow-xl border-t border-gray-200 z-50 px-4 py-3 flex flex-col sm:flex-row items-center justify-between max-w-6xl mx-auto rounded-t-xl">
+          <p className="text-gray-700 text-sm mb-2 sm:mb-0">
+            Selected: <strong>{selected.size} Yard Skip</strong> –{" "}
+            <span className="text-blue-600 font-semibold">{totalPrice}</span>{" "}
+            {selected.allowed_on_road ? "" : (
+              <span className="text-red-600 text-sm ml-2">(Permit Required)</span>
+            )}
+          </p>
+          <button
+            onClick={() => console.log("Proceed to delivery options")}
+            className="bg-blue-600 text-white px-6 py-2 rounded-md flex items-center hover:bg-blue-700 transition-all"
+          >
+            Continue to Delivery Options
+            <FaArrowRight className="ml-2" />
+          </button>
+        </div>
+      )}
     </div>
   );
 };
