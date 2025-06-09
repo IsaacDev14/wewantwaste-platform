@@ -9,7 +9,9 @@ import {
   FaShieldAlt,
   FaCalendarAlt,
   FaCreditCard,
+  FaExclamationTriangle,
 } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
 import WasteCard from "../components/WasteCard";
 import Topbar from "../components/Topbar";
 import type { Skip } from "../types";
@@ -152,44 +154,51 @@ const Homepage = () => {
         </div>
       </main>
 
-
       {/* Fixed bottom bar for selected skip */}
-      {selectedSkipData && (
-        <div className="fixed bottom-0 left-0 w-full bg-white shadow-2xl z-50 border-t border-gray-200">
-          <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-gray-700 text-sm sm:text-base text-center">
-              Selected:{" "}
-              <span className="font-semibold text-blue-700">
-                {selectedSkipData.size} Yard Skip
-              </span>{" "}
-              – <span className="text-green-600">{calculateTotal()}</span>
-              {!selectedSkipData.allowed_on_road && (
-                <span className="text-red-500 text-xs ml-2 font-semibold">
-                  (Not Allowed On The Road)
-                </span>
-              )}
-            </p>
-            
-            <button
-              className="bg-blue-600 text-white px-2 py-2 rounded-lg font-semibold flex items-center hover:bg-blue-700 transition-all duration-200"
-              onClick={() => console.log("Proceed to delivery options")}
-            >
-              Continue to Permit Check
-              <FaArrowRight className="ml-3" />
-            </button>
-            
-          </div>
-          
-      {/* Footer with disclaimer */}
-      <footer className="text-center text-xs text-gray-500 pb-4 max-w-4xl mx-auto">
-        <p className="leading-relaxed">
-          Imagery and information shown throughout this website may not reflect
-          the exact shape or size specification. Colours may vary. Options
-          and/or accessories may be featured at additional cost.
-        </p>
-      </footer>
-        </div>
-      )}
+      <AnimatePresence>
+        {selectedSkipData && (
+          <motion.div
+            key="bottom-bar"
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="fixed bottom-0 left-0 w-full bg-white shadow-2xl z-50 border-t border-gray-200"
+          >
+            <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+              <p className="text-gray-700 text-sm sm:text-base text-center">
+                Selected:{" "}
+                <span className="font-semibold text-blue-700">
+                  {selectedSkipData.size} Yard Skip
+                </span>{" "}
+                – <span className="text-green-600">{calculateTotal()}</span>
+                {!selectedSkipData.allowed_on_road && (
+                  <span className="text-red-500 text-xs ml-2 font-semibold inline-flex items-center">
+                    <FaExclamationTriangle className="mr-1" />
+                    Not Allowed On The Road
+                  </span>
+                )}
+              </p>
+
+              <button
+                className="bg-blue-600 text-white px-2 py-2 rounded-lg font-semibold flex items-center hover:bg-blue-700 transition-all duration-200"
+                onClick={() => console.log("Proceed to delivery options")}
+              >
+                Continue to Permit Check
+                <FaArrowRight className="ml-3" />
+              </button>
+            </div>
+
+            <footer className="text-center text-xs text-gray-500 pb-4 max-w-4xl mx-auto">
+              <p className="leading-relaxed">
+                Imagery and information shown throughout this website may not
+                reflect the exact shape or size specification. Colours may vary.
+                Options and/or accessories may be featured at additional cost.
+              </p>
+            </footer>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
