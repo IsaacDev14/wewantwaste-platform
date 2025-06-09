@@ -64,8 +64,10 @@ const WasteCard: React.FC<WasteCardProps> = ({
 
   return (
     <div
-      onClick={() => setSelectedSkip(skip.id)}
-      className={`relative bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 transform ${
+      onClick={() =>
+  setSelectedSkip(selectedSkip === skip.id ? null : skip.id)
+}
+      className={`relative bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 transform cursor-pointer ${
         selectedSkip === skip.id
           ? "ring-4 ring-blue-500 shadow-xl scale-[1.02]"
           : "hover:scale-[1.02] hover:shadow-xl"
