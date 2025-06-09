@@ -68,8 +68,8 @@ src/
 ## 🧪 Running the Project
 
 ```bash
-npm install
-npm run dev
+bun install
+bun run dev
 ```
 
 Make sure you have the latest version of Node.js and Vite installed.
