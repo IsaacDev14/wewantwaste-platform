@@ -165,7 +165,7 @@ const Homepage = () => {
               – <span className="text-green-600">{calculateTotal()}</span>
               {!selectedSkipData.allowed_on_road && (
                 <span className="text-red-500 text-xs ml-2 font-semibold">
-                  (Permit Required)
+                  (Not Allowed On The Road)
                 </span>
               )}
             </p>
