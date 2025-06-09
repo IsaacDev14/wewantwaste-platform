@@ -14,7 +14,7 @@ import WasteCard from "../components/WasteCard";
 import Topbar from "../components/Topbar";
 import type { Skip } from "../types";
 
-// Booking steps config
+// Step tracker icons (used in Topbar)
 const steps = [
   { label: "Postcode", icon: <FaMapMarkerAlt /> },
   { label: "Waste Type", icon: <FaTrashAlt /> },
@@ -32,7 +32,7 @@ const Homepage = () => {
   const [error, setError] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
-  // Load skips from API
+  // Fetch skips from the API once the component mounts
   useEffect(() => {
     const fetchSkips = async () => {
       try {
@@ -46,25 +46,43 @@ const Homepage = () => {
         setLoading(false);
       }
     };
+
     fetchSkips();
   }, []);
 
-  // Toggle mobile menu
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
-  // Handle loading state
+  const handleBack = () => {
+    console.log("Go back clicked");
+    // TODO: implement actual navigation if needed
+  };
+
+  const selectedSkipData = skips.find((s) => s.id === selectedSkip);
+
+  // Utility to calculate total price
+  const calculateTotal = () => {
+    if (!selectedSkipData) return "";
+    const total =
+      selectedSkipData.price_before_vat +
+      (selectedSkipData.price_before_vat * selectedSkipData.vat) / 100;
+    return `£${total.toFixed(2)}`;
+  };
+
+  // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="flex flex-col items-center bg-white p-8 rounded-xl shadow-xl">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 px-4">
+        <div className="flex flex-col items-center bg-white/60 backdrop-blur-md p-8 rounded-2xl shadow-xl">
           <FaSpinner className="animate-spin text-4xl text-blue-600 mb-4" />
-          <p className="text-gray-700 text-lg">Loading skips...</p>
+          <p className="text-gray-700 text-lg font-medium">Loading skips...</p>
         </div>
       </div>
     );
   }
 
-  // Handle error
+  // Error state
   if (error) {
     return (
       <div className="min-h-[50vh] flex items-center justify-center bg-gray-100 pt-16">
@@ -82,21 +100,17 @@ const Homepage = () => {
     );
   }
 
-  const selected = skips.find((s) => s.id === selectedSkip);
-  const totalPrice =
-    selected && selected.price_before_vat
-      ? `£${(selected.price_before_vat + (selected.price_before_vat * selected.vat) / 100).toFixed(2)}`
-      : "";
-
   return (
-    <div className="bg-gray-100 min-h-screen relative pb-28">
+    <div className="relative bg-gray-100 min-h-screen pb-40">
       <Topbar
         steps={steps}
         activeStepLabel="Select Skip"
         isMenuOpen={isMenuOpen}
         toggleMenu={toggleMenu}
       />
+
       <main className="max-w-6xl mx-auto px-4 pt-20 pb-10">
+        {/* Heading */}
         <div className="text-center my-8 font-serif">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
             Choose Your Skip Size
@@ -106,7 +120,7 @@ const Homepage = () => {
           </p>
         </div>
 
-        {/* Grid of skips */}
+        {/* Grid of skip cards */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {skips.map((skip) => (
             <WasteCard
@@ -120,33 +134,60 @@ const Homepage = () => {
           ))}
         </section>
 
-        {/* Footer */}
-        <footer className="text-center text-xs text-gray-500 px-6 pt-12 max-w-4xl mx-auto">
-          <p className="mt-4">
-            Imagery and information shown throughout this website may not reflect
-            the exact shape or size specification. Colours may vary. Options and/or
-            accessories may be featured at additional cost.
-          </p>
-        </footer>
+        {/* Always-visible back button */}
+        <div className="mt-12 flex justify-center">
+          <button
+            className="text-gray-600 hover:text-gray-900 flex items-center font-medium"
+            onClick={handleBack}
+          >
+            <svg
+              className="w-5 h-5 mr-2"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" />
+            </svg>
+            Back
+          </button>
+        </div>
       </main>
 
-      {/* Fixed bottom bar only when a skip is selected */}
-      {selectedSkip && selected && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white shadow-xl border-t border-gray-200 z-50 px-4 py-3 flex flex-col sm:flex-row items-center justify-between max-w-6xl mx-auto rounded-t-xl">
-          <p className="text-gray-700 text-sm mb-2 sm:mb-0">
-            Selected: <strong>{selected.size} Yard Skip</strong> –{" "}
-            <span className="text-blue-600 font-semibold">{totalPrice}</span>{" "}
-            {selected.allowed_on_road ? "" : (
-              <span className="text-red-600 text-sm ml-2">(Permit Required)</span>
-            )}
-          </p>
-          <button
-            onClick={() => console.log("Proceed to delivery options")}
-            className="bg-blue-600 text-white px-6 py-2 rounded-md flex items-center hover:bg-blue-700 transition-all"
-          >
-            Continue to Delivery Options
-            <FaArrowRight className="ml-2" />
-          </button>
+
+      {/* Fixed bottom bar for selected skip */}
+      {selectedSkipData && (
+        <div className="fixed bottom-0 left-0 w-full bg-white shadow-2xl z-50 border-t border-gray-200">
+          <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p className="text-gray-700 text-sm sm:text-base text-center">
+              Selected:{" "}
+              <span className="font-semibold text-blue-700">
+                {selectedSkipData.size} Yard Skip
+              </span>{" "}
+              – <span className="text-green-600">{calculateTotal()}</span>
+              {!selectedSkipData.allowed_on_road && (
+                <span className="text-red-500 text-xs ml-2 font-semibold">
+                  (Permit Required)
+                </span>
+              )}
+            </p>
+            
+            <button
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold flex items-center hover:bg-blue-700 transition-all duration-200"
+              onClick={() => console.log("Proceed to delivery options")}
+            >
+              Continue to Permit Check
+              <FaArrowRight className="ml-3" />
+            </button>
+            
+          </div>
+          
+      {/* Footer with disclaimer */}
+      <footer className="text-center text-xs text-gray-500 px-6 pb-10 max-w-4xl mx-auto">
+        <p className="leading-relaxed">
+          Imagery and information shown throughout this website may not reflect
+          the exact shape or size specification. Colours may vary. Options
+          and/or accessories may be featured at additional cost.
+        </p>
+      </footer>
         </div>
       )}
     </div>
